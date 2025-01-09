@@ -18,24 +18,13 @@ namespace Real_Estate_Business_API.Controllers
         }
         // GET: api/<ReviewsCotroller>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int pageIndex, int pageSize)
         {
-            var reviews = await _reviewsRepository.GetAllAsync();
+            var reviews = await _reviewsRepository.GetAllAsync(pageIndex, pageSize);
 
             if (reviews == null) { return BadRequest(ModelState); }
 
-            var reviewsDto = reviews.Select(r => new ReviewsDto
-            {
-                Heading = r.Heading,
-                Comment = r.Comment,
-                Rate = r.Rate,
-                UserFullName = r.Client.FullName,
-                UserCountry = r.Client.Country,
-                UserState = r.Client.State,
-                UserImgUrl = r.Client.ImgUrl,
-            });
-
-            return Ok(reviewsDto);
+            return Ok(reviews);
         }
     }
 }
