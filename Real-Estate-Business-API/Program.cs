@@ -1,10 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Real_Estate_Business_API.Data;
+using Real_Estate_Business_API.Interfaces;
+using Real_Estate_Business_API.Repository;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
+builder.Services.AddScoped<IReviewsRepository, ReviewsRepository>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
