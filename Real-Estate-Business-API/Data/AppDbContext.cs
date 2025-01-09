@@ -34,8 +34,7 @@ namespace Real_Estate_Business_API.Data
                 entity.Property(e => e.MortgageFees).HasColumnType("decimal(10,2)");
                 entity.Property(e => e.PropertyTaxes).HasColumnType("decimal(10,2)");
                 entity.Property(e => e.HomeownersAssociationFee).HasColumnType("decimal(10,2)");
-                entity.Property(e => e.ListingPrice).HasColumnType("decimal(10,2)");
-                entity.Property(e => e.DownPayment).HasColumnType("decimal(10,2)");
+                entity.Property(e => e.ListingPrice).HasColumnType("decimal(12,2)");
             });
 
             modelBuilder.Entity<House>()
@@ -52,12 +51,6 @@ namespace Real_Estate_Business_API.Data
                        .HasOne(p => p.House)
                        .WithOne(h => h.Pricing)
                        .HasForeignKey<Pricing>(p => p.HouseId); 
-            
-            modelBuilder.Entity<FeaturesAndAmenities>()
-                       .HasOne(f => f.House)
-                       .WithOne(h => h.FeaturesAndAmenities)
-                       .HasForeignKey<FeaturesAndAmenities>(f => f.HouseId);
-
         }
     }
 }

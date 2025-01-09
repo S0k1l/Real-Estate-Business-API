@@ -8,6 +8,7 @@ namespace Real_Estate_Business_API.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int Bedrooms { get; set; }
+        public int Bathroom { get; set; }
         public decimal Area { get; set; }
         public string Description { get; set; }
         public string Details { get; set; }
@@ -20,8 +21,7 @@ namespace Real_Estate_Business_API.Models
         public HouseType HouseType { get; set; }
         public int PricingId { get; set; }
         public Pricing Pricing { get; set; }
-        public int FeaturesAndAmenitiesId { get; set; }
-        public FeaturesAndAmenities FeaturesAndAmenities { get; set; }
+        public ICollection<FeaturesAndAmenities> FeaturesAndAmenities { get; set; }
         public ICollection<HouseImg> HouseImgs { get; set; }
 
     }

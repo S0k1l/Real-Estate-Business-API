@@ -6,7 +6,6 @@ namespace Real_Estate_Business_API.Models
 {
     public class Client
     {
-        [Key]
         public int Id { get; set; }
         public string FullName { get; set; }
         public string Country { get; set; }
