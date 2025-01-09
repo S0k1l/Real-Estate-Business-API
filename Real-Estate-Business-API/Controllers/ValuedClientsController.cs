@@ -19,21 +19,13 @@ namespace Real_Estate_Business_API.Controllers
 
         // GET: api/<ValuedClientsController>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int pageIndex, int pageSize)
         {
-            var valuedClients = await _valuedClientsRepository.GetAllsAsync();
+            var valuedClients = await _valuedClientsRepository.GetAllAsync(pageIndex, pageSize);
 
             if (valuedClients == null) { return BadRequest(ModelState); }
 
-            var valuedClientsDto = valuedClients.Select(vc => new ValuedClientsDto
-            {
-                Company = vc.Company,
-                Domain = vc.Domain,
-                Year = vc.Year,
-                Category = vc.Category.Type
-            });
-
-            return Ok(valuedClientsDto);
+            return Ok(valuedClients);
         }
     }
 }
