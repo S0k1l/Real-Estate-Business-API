@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IReviewsRepository, ReviewsRepository>();
 builder.Services.AddScoped<IValuedClientsRepository, ValuedClientsRepository>();
 builder.Services.AddScoped<IHousesRepository, HousesRepository>();
+builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 
 
 builder.Services.AddControllers();
