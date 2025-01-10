@@ -6,5 +6,6 @@
         public string Domain { get; set; }
         public string Year { get; set; }
         public string Category { get; set; }
+        public string Comment { get; set; }
     }
 }

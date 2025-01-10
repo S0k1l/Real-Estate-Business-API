@@ -9,6 +9,7 @@ namespace Real_Estate_Business_API.Models
         public string Company { get; set; }
         public string Domain { get; set; }
         public string Year { get; set; }
+        public string Comment { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
     }

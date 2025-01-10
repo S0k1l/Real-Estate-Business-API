@@ -23,7 +23,8 @@ namespace Real_Estate_Business_API.Repository
                     Company = vc.Company,
                     Domain = vc.Domain,
                     Year = vc.Year,
-                    Category = vc.Category.Type
+                    Category = vc.Category.Type,
+                    Comment = vc.Comment,
                 })
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
