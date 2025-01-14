@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FuzzySharp;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Real_Estate_Business_API.Data;
 using Real_Estate_Business_API.Dto;
 using Real_Estate_Business_API.Interfaces;
 using Real_Estate_Business_API.Models;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Real_Estate_Business_API.Repository
 {
@@ -18,56 +21,66 @@ namespace Real_Estate_Business_API.Repository
 
         public async Task<PagedResponse<HousesAdvertsDto>> GetAllAdvertsAsync(int pageIndex, int pageSize, SearchRequest searchRequest)
         {
-            var houses = _context.Houses
+            var query = _context.Houses
                 .Include(h => h.Pricing)
                 .Include(h => h.HouseImgs)
                 .AsQueryable();
 
-            if (!searchRequest.Name.IsNullOrEmpty())
+            if (searchRequest.PropertyTypeId.HasValue)
             {
-                houses = houses.Where(h => h.Name.ToUpper().Contains(searchRequest.Name.ToUpper().Trim()));
+                query = query.Where(h => h.HouseType.Id == searchRequest.PropertyTypeId);
             }
 
-            if (searchRequest.PropertyTypeId.HasValue) 
+            if (searchRequest.PropertySize.HasValue)
             {
-                houses = houses.Where(h => h.HouseType.Id == searchRequest.PropertyTypeId);
-            }
-            
-            if (searchRequest.PropertySize.HasValue) 
-            {
-                houses = houses.Where(h => h.Area >= searchRequest.PropertySize);
+                query = query.Where(h => h.Area >= searchRequest.PropertySize);
             }
 
-            if (searchRequest.PricingRange.HasValue) 
+            if (searchRequest.PricingRange.HasValue)
             {
-                houses = houses.Where(h => h.Pricing.ListingPrice >= searchRequest.PricingRange);
+                query = query.Where(h => h.Pricing.ListingPrice >= searchRequest.PricingRange);
             }
 
-            if (!searchRequest.Location.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(searchRequest.Location))
             {
                 var locationParts = searchRequest.Location.Split(',');
                 if (locationParts.Length == 3)
                 {
-                    houses = houses.Where(h => h.Country == locationParts[0].Trim() && h.State == locationParts[1].Trim() && h.City == locationParts[2].Trim());
+                    query = query.Where(h => h.Country == locationParts[0].Trim() && h.State == locationParts[1].Trim() && h.City == locationParts[2].Trim());
                 }
             }
 
-            var housesPaginated = await houses
-            .Select(h => new HousesAdvertsDto
+            var houses = await query.ToListAsync();
+
+            if (!string.IsNullOrEmpty(searchRequest.Name))
             {
-                Id  = h.Id,
-                Name = h.Name,
-                Advert = h.Advert,
-                Quote = h.Quote,
-                Pricing = h.Pricing.ListingPrice,
-                HouseImg = h.HouseImgs.FirstOrDefault().Url
-            })
-            .Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+                var bestMatches = houses.Select(record => new
+                {
+                    Record = record,
+                    Score = Fuzz.TokenSetRatio(searchRequest.Name, record.Name)
+                })
+                .OrderByDescending(result => result.Score)
+                .ToList();
+
+                houses = bestMatches.Select(bm => bm.Record).ToList();
+            }
 
             var count = houses.Count();
             var totalPages = (int)Math.Ceiling(count / (double)pageSize);
+
+            var housesPaginated = houses
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .Select(h => new HousesAdvertsDto
+                {
+                    Id = h.Id,
+                    Name = h.Name,
+                    Advert = h.Advert,
+                    Quote = h.Quote,
+                    Pricing = h.Pricing.ListingPrice,
+                    HouseImg = h.HouseImgs.FirstOrDefault().Url
+                })
+                .ToList();
 
             return new PagedResponse<HousesAdvertsDto>(housesPaginated, pageIndex, totalPages);
         }
