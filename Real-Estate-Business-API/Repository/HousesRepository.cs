@@ -33,12 +33,12 @@ namespace Real_Estate_Business_API.Repository
 
             if (searchRequest.PropertySize.HasValue)
             {
-                query = query.Where(h => h.Area >= searchRequest.PropertySize);
+                query = query.Where(h => h.Area <= searchRequest.PropertySize);
             }
 
             if (searchRequest.PricingRange.HasValue)
             {
-                query = query.Where(h => h.Pricing.ListingPrice >= searchRequest.PricingRange);
+                query = query.Where(h => h.Pricing.ListingPrice <= searchRequest.PricingRange);
             }
 
             if (!string.IsNullOrEmpty(searchRequest.Location))
