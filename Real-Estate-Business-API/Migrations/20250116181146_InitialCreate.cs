@@ -63,6 +63,7 @@ namespace Real_Estate_Business_API.Migrations
                     Company = table.Column<string>(type: "text", nullable: false),
                     Domain = table.Column<string>(type: "text", nullable: false),
                     Year = table.Column<string>(type: "text", nullable: false),
+                    Comment = table.Column<string>(type: "text", nullable: false),
                     CategoryId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -106,6 +107,7 @@ namespace Real_Estate_Business_API.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Bedrooms = table.Column<int>(type: "integer", nullable: false),
+                    Bathroom = table.Column<int>(type: "integer", nullable: false),
                     Area = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     Details = table.Column<string>(type: "text", nullable: false),
@@ -115,8 +117,7 @@ namespace Real_Estate_Business_API.Migrations
                     State = table.Column<string>(type: "text", nullable: false),
                     City = table.Column<string>(type: "text", nullable: false),
                     HouseTypeId = table.Column<int>(type: "integer", nullable: false),
-                    PricingId = table.Column<int>(type: "integer", nullable: false),
-                    FeaturesAndAmenitiesId = table.Column<int>(type: "integer", nullable: false)
+                    PricingId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -175,15 +176,14 @@ namespace Real_Estate_Business_API.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PropertyTransferTax = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    LegalFees = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    HomeInspection = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    PropertyInsurance = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    MortgageFees = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    PropertyTaxes = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    HomeownersAssociationFee = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    ListingPrice = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    DownPayment = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
+                    PropertyTransferTax = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    LegalFees = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    HomeInspection = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    PropertyInsurance = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    MortgageFees = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    PropertyTaxes = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    HomeownersAssociationFee = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
+                    ListingPrice = table.Column<decimal>(type: "numeric(12,2)", nullable: false),
                     HouseId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -200,8 +200,7 @@ namespace Real_Estate_Business_API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_FeaturesAndAmenities_HouseId",
                 table: "FeaturesAndAmenities",
-                column: "HouseId",
-                unique: true);
+                column: "HouseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HouseImgs_HouseId",

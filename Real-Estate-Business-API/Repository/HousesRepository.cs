@@ -1,6 +1,5 @@
 ﻿using FuzzySharp;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Real_Estate_Business_API.Data;
 using Real_Estate_Business_API.Dto;
 using Real_Estate_Business_API.Interfaces;
