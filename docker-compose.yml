@@ -1,0 +1,6 @@
+services:
+  real-estate-business-api:
+    image: ${DOCKER_REGISTRY-}realestatebusinessapi
+    build:
+      context: .
+      dockerfile: Real-Estate-Business-API/Dockerfile

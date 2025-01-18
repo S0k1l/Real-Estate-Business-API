@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
+
+builder.Configuration.AddEnvironmentVariables();
+
 builder.Services.AddScoped<IReviewsRepository, ReviewsRepository>();
 builder.Services.AddScoped<IValuedClientsRepository, ValuedClientsRepository>();
 builder.Services.AddScoped<IHousesRepository, HousesRepository>();
@@ -19,9 +22,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
+                     ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(connectionString);
 });
 
 var app = builder.Build();
